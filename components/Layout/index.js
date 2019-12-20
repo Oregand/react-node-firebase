@@ -3,11 +3,7 @@ import 'semantic-ui-css/semantic.min.css'
 import Head from '../Head'
 import Nav from '../Nav'
 
-const layoutStyle = {
-  margin: 20,
-  padding: 20,
-  border: '1px solid #DDD'
-};
+const layoutStyle = {};
 
 const Layout = props => (
   <div style={layoutStyle}>

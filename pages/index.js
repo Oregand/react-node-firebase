@@ -2,22 +2,17 @@ import React from 'react'
 import Link from 'next/link'
 import {
   Button,
-  Container,
-  Divider,
   Grid,
   Header,
   Icon,
   Image,
   List,
-  Menu,
-  Responsive,
   Segment,
-  Sidebar,
-  Visibility,
 } from 'semantic-ui-react'
+import fetch from 'isomorphic-unfetch';
 import Layout from '../components/Layout'
 
-const Home = () => (
+const Home = props => (
   <div>
     <Layout>
       <Segment style={{ padding: '8em 0em' }} vertical>
@@ -72,9 +67,42 @@ const Home = () => (
         </Grid.Row>
       </Grid>
     </Segment>
+    <Segment>
+    <Grid celled='internally' columns='equal' stackable>
+        <Grid.Row textAlign='center'>
+          <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
+            <Header as='h3' style={{ fontSize: '2em' }}>
+              Screams
+            </Header>
+            <List>
+              {props.screams.map(scream => (
+                scream ? (
+                  <List.Item>{scream.body}</List.Item>
+                )
+                : 
+                (
+                  <List.Item>No Screams here</List.Item>
+                )
+              ))}
+            </List>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Segment>
     </Layout>
     <style jsx>{``}</style>
   </div>
-)
+);
+
+Home.getInitialProps = async function() {
+  const res = await fetch('https://us-central1-social-ape-1717c.cloudfunctions.net/api/screams');
+  const data = await res.json();
+
+  console.log(`Scream data fetched. Count: ${data.length}`);
+
+  return {
+    screams: data.map(entry => entry.show)
+  };
+};
 
 export default Home
